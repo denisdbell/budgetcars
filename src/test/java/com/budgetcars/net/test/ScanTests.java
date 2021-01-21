@@ -16,7 +16,7 @@ class ScanTests {
 	@Test
 	void testScanMethod() {
 		scan = new Scan();
-		scan.scan();
+		scan.scanAll(scan.maxPageCount);
 	}
 
 }

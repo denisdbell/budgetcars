@@ -1,6 +1,5 @@
 package com.bugdetcars.net.model;
 
-import java.util.Date;
 import lombok.Data;
 
 @Data
@@ -9,5 +8,9 @@ public class Vehicle {
 	String model;
 	String link;
 	Double price;
-	Date year;
+	String year;
+	
+	public String value() {
+		return make+model+link+price+year;
+	}
 }
