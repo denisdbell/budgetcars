@@ -3,6 +3,7 @@ package com.bugdetcars.net.scan;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -10,27 +11,42 @@ import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.budgetcars.net.repository.VehicleRepository;
+import com.budgetcars.net.wrapper.JsoupWrapper;
 import com.bugdetcars.net.model.Vehicle;
 
+import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@Data
+@Component
 public class Scan {
 
 	public String url = "https://www.autoadsja.com/search.asp?SearchSB=5&page=%d";
 	public int maxPageCount = 350;
-
+	public Document document;
+	public JsoupWrapper jsoup = new JsoupWrapper();
+	
+	@Autowired
+	VehicleRepository vehicleRepository;
+	
 	public List<Vehicle> scan(String url) {
 
-		HashMap<String,Vehicle> vehiclesHash = new HashMap<String,Vehicle>();
+		HashMap<String,Vehicle> vehiclesHash = new LinkedHashMap<String,Vehicle>();
 
-		Document doc = null;
-		Vehicle vehicle = new Vehicle();
+		Document document = null;
 		try {
-			doc = Jsoup.connect(url).get();
-			Elements newsHeadlines = doc.select(".thumbnail");
+			
+			document = jsoup.connect(url);
+			
+			Elements newsHeadlines = document.select(".thumbnail");
 			for (Element headline : newsHeadlines) {
+				Vehicle vehicle = new Vehicle();
+
 				Elements atags = headline.getElementsByTag("a");
 				Elements descriptionTags = headline.getElementsByClass("description");
 				log.debug("descriptionTags ", descriptionTags.size());
@@ -43,10 +59,9 @@ public class Scan {
 					vehicle.setModel(getModel(yearMakeModel));
 					vehicle.setYear(getYear(yearMakeModel));
 					vehicle.setPrice(getPrice(price));
+					//Store unique vehicles
 					vehiclesHash.put(vehicle.value(),vehicle);
 				}
-
-				System.out.println(vehicle);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -56,11 +71,17 @@ public class Scan {
 
 	}
 
-	public void scanAll(int maxPageCount) {
-		for (int pageCount = 0; pageCount <= maxPageCount; pageCount++) {
+	public ArrayList<Vehicle> scanAll(int maxPageCount) {
+		
+		ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>();
+		for (int pageCount = 1; pageCount <= maxPageCount; pageCount++) {
 			String urlString = String.format(this.url, pageCount);
-			scan(urlString);
+			vehicles.addAll(scan(urlString));
 		}
+		
+		vehicleRepository.saveAll(vehicles);
+		
+		return vehicles;
 	}
 
 	private String getYear(String yearMakeModel) {
