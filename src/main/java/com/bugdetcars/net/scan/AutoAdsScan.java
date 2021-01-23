@@ -1,12 +1,10 @@
 package com.bugdetcars.net.scan;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.jsoup.Jsoup;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,10 +19,11 @@ import com.bugdetcars.net.model.Vehicle;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
+
 @Log4j2
 @Data
 @Component
-public class Scan {
+public class AutoAdsScan extends GenericScan {
 
 	public String url = "https://www.autoadsja.com/search.asp?SearchSB=5&page=%d";
 	public int maxPageCount = 350;
@@ -49,7 +48,6 @@ public class Scan {
 
 				Elements atags = headline.getElementsByTag("a");
 				Elements descriptionTags = headline.getElementsByClass("description");
-				log.debug("descriptionTags ", descriptionTags.size());
 				String yearMakeModel = descriptionTags.get(0).getElementsByTag("h2").text();
 				String price = descriptionTags.get(0).getElementsByTag("span").get(1).text();
 				
@@ -76,6 +74,7 @@ public class Scan {
 		ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>();
 		for (int pageCount = 1; pageCount <= maxPageCount; pageCount++) {
 			String urlString = String.format(this.url, pageCount);
+			log.info(urlString + ":" + this.getPercentage(pageCount,maxPageCount) + "%");
 			vehicles.addAll(scan(urlString));
 		}
 		
@@ -83,25 +82,30 @@ public class Scan {
 		
 		return vehicles;
 	}
-
-	private String getYear(String yearMakeModel) {
+	
+	public String getYear(String yearMakeModel) {
 		return yearMakeModel.split(" ")[0];
 	}
-
-	private String getMake(String yearMakeModel) {
+	
+	public String getMake(String yearMakeModel) {
 		return yearMakeModel.split(" ")[1];
-	}
-
-	private String getModel(String yearMakeModel) {
+	}	
+	
+	public String getModel(String yearMakeModel) {
 		return yearMakeModel.split(" ")[2];
 	}
-
-	private String getLink(Element atag) {
+	
+	public String getLink(Element atag) {
 		return atag.attr("href");
 	}
 	
-	private Double getPrice(String price) {
+	public Double getPrice(String price) {
 		return Double.valueOf(price.replaceAll("[^\\d.]", ""));
+	}
 
+	@Override
+	public int getMaxPageCount(String homePageUrl) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

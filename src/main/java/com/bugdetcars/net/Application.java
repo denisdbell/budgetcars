@@ -6,14 +6,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.bugdetcars.net.scan.Scan;
+import com.bugdetcars.net.scan.AutoAdsScan;
+import com.bugdetcars.net.scan.JaCarsScan;
 
 @SpringBootApplication
 @EnableJpaRepositories("com.budgetcars.net.repository")
 public class Application  implements CommandLineRunner  {
 	
 	@Autowired
-	Scan autoAdScan;
+	AutoAdsScan autoAdScan;
+	@Autowired
+	JaCarsScan jaCarsScan;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -21,6 +24,6 @@ public class Application  implements CommandLineRunner  {
 	
 	@Override
 	public void run(String... args) throws Exception {
-		autoAdScan.scanAll(autoAdScan.maxPageCount);
+		jaCarsScan.scanAll(autoAdScan.maxPageCount);
 	}  
 }

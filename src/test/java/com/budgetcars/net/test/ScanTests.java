@@ -20,13 +20,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.budgetcars.net.wrapper.JsoupWrapper;
 import com.bugdetcars.net.Application;
 import com.bugdetcars.net.model.Vehicle;
-import com.bugdetcars.net.scan.Scan;
+import com.bugdetcars.net.scan.AutoAdsScan;
 
 
 @SpringBootTest(classes = Application.class)
 class ScanTests {
 	
-	Scan autoAdScan;
+	AutoAdsScan autoAdScan;
 	String autoAdsUrl = "http://autoads.com";
 	String autoAdsPageValue = null;
 	JsoupWrapper mockJsoup = Mockito.mock(JsoupWrapper.class);
@@ -34,7 +34,7 @@ class ScanTests {
 	@BeforeEach
 	public void before() throws IOException {
 		
-		autoAdScan = new Scan();
+		autoAdScan = new AutoAdsScan();
 		
 		autoAdScan.setJsoup(mockJsoup);
 		autoAdScan.setMaxPageCount(1);
