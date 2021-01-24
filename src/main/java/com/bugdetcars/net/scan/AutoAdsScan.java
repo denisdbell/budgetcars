@@ -21,28 +21,25 @@ import lombok.extern.log4j.Log4j2;
 
 
 @Log4j2
-@Data
 @Component
 public class AutoAdsScan extends GenericScan {
-
-	public String url = "https://www.autoadsja.com/search.asp?SearchSB=5&page=%d";
-	public int maxPageCount = 350;
-	public Document document;
-	public JsoupWrapper jsoup = new JsoupWrapper();
 	
 	@Autowired
 	VehicleRepository vehicleRepository;
+	
+	public AutoAdsScan() {
+		this.setUrl("https://www.autoadsja.com/search.asp?SearchSB=5&page=%d");
+		this.setMaxPageCount(350);
+	}
 	
 	public List<Vehicle> scan(String url) {
 
 		HashMap<String,Vehicle> vehiclesHash = new LinkedHashMap<String,Vehicle>();
 
-		Document document = null;
 		try {
+			this.setDocument(this.getJsoup().connect(url));
 			
-			document = jsoup.connect(url);
-			
-			Elements newsHeadlines = document.select(".thumbnail");
+			Elements newsHeadlines = this.getDocument().select(".thumbnail");
 			for (Element headline : newsHeadlines) {
 				Vehicle vehicle = new Vehicle();
 
@@ -73,7 +70,7 @@ public class AutoAdsScan extends GenericScan {
 		
 		ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>();
 		for (int pageCount = 1; pageCount <= maxPageCount; pageCount++) {
-			String urlString = String.format(this.url, pageCount);
+			String urlString = String.format(this.getUrl(), pageCount);
 			log.info(urlString + ":" + this.getPercentage(pageCount,maxPageCount) + "%");
 			vehicles.addAll(scan(urlString));
 		}

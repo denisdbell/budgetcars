@@ -24,6 +24,6 @@ public class Application  implements CommandLineRunner  {
 	
 	@Override
 	public void run(String... args) throws Exception {
-		jaCarsScan.scanAll(autoAdScan.maxPageCount);
+		jaCarsScan.scanAll(jaCarsScan.getMaxPageCount());
 	}  
 }

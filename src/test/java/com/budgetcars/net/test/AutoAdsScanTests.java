@@ -24,7 +24,7 @@ import com.bugdetcars.net.scan.AutoAdsScan;
 
 
 @SpringBootTest(classes = Application.class)
-class ScanTests {
+class AutoAdsScanTests {
 	
 	AutoAdsScan autoAdScan;
 	String autoAdsUrl = "http://autoads.com";
@@ -37,7 +37,7 @@ class ScanTests {
 		autoAdScan = new AutoAdsScan();
 		
 		autoAdScan.setJsoup(mockJsoup);
-		autoAdScan.setMaxPageCount(1);
+		autoAdScan.setMaxPageCount(autoAdScan.getMaxPageCount());
 		
 	    File file = new File("src/test/resources/autoads.html");
 	    
@@ -55,14 +55,14 @@ class ScanTests {
 	@Test
 	void testThatScanAllMethodIsReturingTheCorrectAmountOfVehcles() {
 		autoAdScan.setUrl(autoAdsUrl);
-		List<Vehicle> vehicles = autoAdScan.scanAll(autoAdScan.maxPageCount);
+		List<Vehicle> vehicles = autoAdScan.scanAll(autoAdScan.getMaxPageCount());
 		assertEquals(vehicles.size(), 8);
 	}
 	
 	@Test
 	void testThatScanAllReturningCorrectYear() {
 		autoAdScan.setUrl(autoAdsUrl);
-		List<Vehicle> vehicles = autoAdScan.scanAll(autoAdScan.maxPageCount);
+		List<Vehicle> vehicles = autoAdScan.scanAll(autoAdScan.getMaxPageCount());
 		Vehicle vehicle = vehicles.get(0);
 		assertEquals(vehicle.getYear(), "2013");
 
@@ -71,7 +71,7 @@ class ScanTests {
 	@Test
 	void testThatScanAllReturningCorrectMake() {
 		autoAdScan.setUrl(autoAdsUrl);
-		List<Vehicle> vehicles = autoAdScan.scanAll(autoAdScan.maxPageCount);
+		List<Vehicle> vehicles = autoAdScan.scanAll(autoAdScan.getMaxPageCount());
 		Vehicle vehicle = vehicles.get(0);
 		assertEquals(vehicle.getMake(), "Toyota");
 
@@ -80,7 +80,7 @@ class ScanTests {
 	@Test
 	void testThatScanAllReturningCorrectModel() {
 		autoAdScan.setUrl(autoAdsUrl);
-		List<Vehicle> vehicles = autoAdScan.scanAll(autoAdScan.maxPageCount);
+		List<Vehicle> vehicles = autoAdScan.scanAll(autoAdScan.getMaxPageCount());
 		Vehicle vehicle = vehicles.get(0);
 		assertEquals(vehicle.getModel(), "Ractis");
 	}
@@ -88,7 +88,7 @@ class ScanTests {
 	@Test
 	void testThatScanAllReturningCorrectLink() {
 		autoAdScan.setUrl(autoAdsUrl);
-		List<Vehicle> vehicles = autoAdScan.scanAll(autoAdScan.maxPageCount);
+		List<Vehicle> vehicles = autoAdScan.scanAll(autoAdScan.getMaxPageCount());
 		Vehicle vehicle = vehicles.get(0);
 		assertEquals(vehicle.getLink(), "https://www.autoadsja.com/J8JT");
 	}
@@ -96,7 +96,7 @@ class ScanTests {
 	@Test
 	void testThatScanAllReturningCorrectPrice() {
 		autoAdScan.setUrl(autoAdsUrl);
-		List<Vehicle> vehicles = autoAdScan.scanAll(autoAdScan.maxPageCount);
+		List<Vehicle> vehicles = autoAdScan.scanAll(autoAdScan.getMaxPageCount());
 		Vehicle vehicle = vehicles.get(0);
 		assertEquals(vehicle.getPrice(), 1320000.0);
 	}

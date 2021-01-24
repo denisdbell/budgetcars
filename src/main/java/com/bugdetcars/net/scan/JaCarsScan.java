@@ -17,38 +17,35 @@ import com.budgetcars.net.repository.VehicleRepository;
 import com.budgetcars.net.wrapper.JsoupWrapper;
 import com.bugdetcars.net.model.Vehicle;
 
-import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-@Data
 @Component
 public class JaCarsScan extends GenericScan  {
-	public String url = "https://www.jacars.net/cars/?page=%d";
-	public int maxPageCount = 350;
-	public Document document;
-	public JsoupWrapper jsoup = new JsoupWrapper();
 	
 	@Autowired
 	VehicleRepository vehicleRepository;
+	
+	public JaCarsScan() {
+		 this.setUrl("https://www.jacars.net/cars/?page=%d");
+	}
 	
 	public List<Vehicle> scan(String url) {
 
 		HashMap<String,Vehicle> vehiclesHash = new LinkedHashMap<String,Vehicle>();
 
-		Document document = null;
 		try {
 			
-			document = jsoup.connect(url);
+			this.setDocument(this.getJsoup().connect(url));
 			
-			Elements newsHeadlines = document.select(".announcement-container");
+			Elements newsHeadlines = this.getDocument().select("announcement-container");
 			for (Element headline : newsHeadlines) {
 				Vehicle vehicle = new Vehicle();
 
 				Elements imageTags = headline.getElementsByTag("img");
 				String yearMakeModel = imageTags.get(0).attr("title");
-				log.info(headline.getElementsByClass("announcement-block__price").text());
-				String price = headline.getElementsByClass("announcement-block__price").text();				
+				log.info(headline);
+				String price = headline.getElementsByTag("meta").get(0).text();				
 				
 				if (!StringUtil.isBlank(yearMakeModel)) {
 					vehicle.setLink(getLink(imageTags.get(0)));
@@ -67,15 +64,13 @@ public class JaCarsScan extends GenericScan  {
 		}
 
 		return  new ArrayList<Vehicle>(vehiclesHash.values());
-
 	}
 
 	public ArrayList<Vehicle> scanAll(int maxPageCount) {
-		maxPageCount = getMaxPageCount("https://www.jacars.net/cars");
 		log.info(maxPageCount);
 		ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>();
 		for (int pageCount = 1; pageCount <= maxPageCount; pageCount++) {
-			String urlString = String.format(this.url, pageCount);
+			String urlString = String.format(this.getUrl(), pageCount);
 			log.info(urlString + ":" + this.getPercentage(pageCount,maxPageCount) + "%");
 			vehicles.addAll(scan(urlString));
 		}
@@ -108,7 +103,7 @@ public class JaCarsScan extends GenericScan  {
 	
 	public int getMaxPageCount(String homePageUrl) {
 		
-		Document document = jsoup.connect(homePageUrl);
+		Document document = this.getJsoup().connect(homePageUrl);
 		
 		Elements pageNumbers = document.select(".page-number");
 		
@@ -124,5 +119,9 @@ public class JaCarsScan extends GenericScan  {
 		
 		return Collections.max(pageNumberList);
 
+	}
+	
+	public void setMaxPageCountFromPagination() {
+		this.setMaxPageCount(getMaxPageCount("https://www.jacars.net/cars"));
 	}
 }
