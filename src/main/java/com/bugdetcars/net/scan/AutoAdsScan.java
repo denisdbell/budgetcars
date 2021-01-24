@@ -24,9 +24,6 @@ import lombok.extern.log4j.Log4j2;
 @Component
 public class AutoAdsScan extends GenericScan {
 	
-	@Autowired
-	VehicleRepository vehicleRepository;
-	
 	public AutoAdsScan() {
 		this.setUrl("https://www.autoadsja.com/search.asp?SearchSB=5&page=%d");
 		this.setMaxPageCount(350);
@@ -75,7 +72,7 @@ public class AutoAdsScan extends GenericScan {
 			vehicles.addAll(scan(urlString));
 		}
 		
-		vehicleRepository.saveAll(vehicles);
+		this.getVehicleRepository().saveAll(vehicles);
 		
 		return vehicles;
 	}

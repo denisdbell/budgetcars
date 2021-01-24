@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.budgetcars.net.repository.VehicleRepository;
 import com.budgetcars.net.wrapper.JsoupWrapper;
 import com.bugdetcars.net.Application;
 import com.bugdetcars.net.model.Vehicle;
@@ -33,6 +34,7 @@ class JaCarsScanTest {
 	String jaCarsUrl = "http://jacars.com";
 	String autoAdsPageValue = null;
 	JsoupWrapper mockJsoup = Mockito.mock(JsoupWrapper.class);
+	VehicleRepository vehicleRepository = Mockito.mock(VehicleRepository.class);
 	
 	@BeforeEach
 	public void before() throws IOException {
@@ -41,6 +43,7 @@ class JaCarsScanTest {
 		
 		jaCarsScan.setJsoup(mockJsoup);
 		jaCarsScan.setMaxPageCount(1);
+		jaCarsScan.setVehicleRepository(vehicleRepository);
 		
 	    File file = new File("src/test/resources/jacars.html");
 	    
@@ -49,6 +52,7 @@ class JaCarsScanTest {
 				targetStream,
 			      "UTF-8"
 			    );
+		log.info(jaCarsPageValue);
 		Document jaCarsDocument = Jsoup.parse(jaCarsPageValue);
 		Mockito.when(mockJsoup.connect(jaCarsUrl)).thenReturn(jaCarsDocument);
 	}
@@ -57,48 +61,48 @@ class JaCarsScanTest {
 	void testThatScanAllMethodIsReturingTheCorrectAmountOfVehcles() {
 		jaCarsScan.setUrl(jaCarsUrl);
 		List<Vehicle> vehicles = jaCarsScan.scanAll(jaCarsScan.getMaxPageCount());
-		assertEquals(vehicles.size(), 18);
+		assertEquals(vehicles.size(), 67);
 	}
 	
-//	@Test
-//	void testThatScanAllReturningCorrectYear() {
-//		jaCarsScan.setUrl(jaCarsUrl);
-//		List<Vehicle> vehicles = jaCarsScan.scanAll(jaCarsScan.maxPageCount);
-//		Vehicle vehicle = vehicles.get(0);
-//		assertEquals(vehicle.getYear(), "2013");
-//
-//	}
-//	
-//	@Test
-//	void testThatScanAllReturningCorrectMake() {
-//		jaCarsScan.setUrl(jaCarsUrl);
-//		List<Vehicle> vehicles = jaCarsScan.scanAll(jaCarsScan.maxPageCount);
-//		Vehicle vehicle = vehicles.get(0);
-//		assertEquals(vehicle.getMake(), "Toyota");
-//
-//	}
-//	
-//	@Test
-//	void testThatScanAllReturningCorrectModel() {
-//		jaCarsScan.setUrl(jaCarsUrl);
-//		List<Vehicle> vehicles = jaCarsScan.scanAll(jaCarsScan.maxPageCount);
-//		Vehicle vehicle = vehicles.get(0);
-//		assertEquals(vehicle.getModel(), "Ractis");
-//	}
-//	
-//	@Test
-//	void testThatScanAllReturningCorrectLink() {
-//		jaCarsScan.setUrl(jaCarsUrl);
-//		List<Vehicle> vehicles = jaCarsScan.scanAll(jaCarsScan.maxPageCount);
-//		Vehicle vehicle = vehicles.get(0);
-//		assertEquals(vehicle.getLink(), "https://www.autoadsja.com/J8JT");
-//	}
-//	
-//	@Test
-//	void testThatScanAllReturningCorrectPrice() {
-//		jaCarsScan.setUrl(jaCarsUrl);
-//		List<Vehicle> vehicles = jaCarsScan.scanAll(jaCarsScan.maxPageCount);
-//		Vehicle vehicle = vehicles.get(0);
-//		assertEquals(vehicle.getPrice(), 1320000.0);
-//	}
+	@Test
+	void testThatScanAllReturningCorrectYear() {
+		jaCarsScan.setUrl(jaCarsUrl);
+		List<Vehicle> vehicles = jaCarsScan.scanAll(jaCarsScan.getMaxPageCount());
+		Vehicle vehicle = vehicles.get(0);
+		assertEquals(vehicle.getYear(), "2015");
+
+	}
+	
+	@Test
+	void testThatScanAllReturningCorrectMake() {
+		jaCarsScan.setUrl(jaCarsUrl);
+		List<Vehicle> vehicles = jaCarsScan.scanAll(jaCarsScan.getMaxPageCount());
+		Vehicle vehicle = vehicles.get(0);
+		assertEquals(vehicle.getMake(), "Toyota");
+
+	}
+	
+	@Test
+	void testThatScanAllReturningCorrectModel() {
+		jaCarsScan.setUrl(jaCarsUrl);
+		List<Vehicle> vehicles = jaCarsScan.scanAll(jaCarsScan.getMaxPageCount());
+		Vehicle vehicle = vehicles.get(0);
+		assertEquals(vehicle.getModel(), "Mark");
+	}
+	
+	@Test
+	void testThatScanAllReturningCorrectLink() {
+		jaCarsScan.setUrl(jaCarsUrl);
+		List<Vehicle> vehicles = jaCarsScan.scanAll(jaCarsScan.getMaxPageCount());
+		Vehicle vehicle = vehicles.get(0);
+		assertEquals(vehicle.getLink(), "https://www.jacars.net/adv/2273483_toyota-mark-x-2-5l-2015/");
+	}
+	
+	@Test
+	void testThatScanAllReturningCorrectPrice() {
+		jaCarsScan.setUrl(jaCarsUrl);
+		List<Vehicle> vehicles = jaCarsScan.scanAll(jaCarsScan.getMaxPageCount());
+		Vehicle vehicle = vehicles.get(0);
+		assertEquals(vehicle.getPrice(), 2680000.0);
+	}
 }

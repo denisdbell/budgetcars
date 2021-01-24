@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.budgetcars.net.repository.VehicleRepository;
 import com.budgetcars.net.wrapper.JsoupWrapper;
 import com.bugdetcars.net.model.Vehicle;
 
@@ -18,6 +20,8 @@ public abstract class GenericScan {
 	private int maxPageCount = 0;
 	private Document document = null;
 	private JsoupWrapper jsoup = null;
+	@Autowired
+	private VehicleRepository vehicleRepository;
 	
 	public abstract List<Vehicle> scan(String url);
 

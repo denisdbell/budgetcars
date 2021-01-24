@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.budgetcars.net.repository.VehicleRepository;
-import com.budgetcars.net.wrapper.JsoupWrapper;
 import com.bugdetcars.net.model.Vehicle;
 
 import lombok.extern.log4j.Log4j2;
@@ -23,8 +22,7 @@ import lombok.extern.log4j.Log4j2;
 @Component
 public class JaCarsScan extends GenericScan  {
 	
-	@Autowired
-	VehicleRepository vehicleRepository;
+	
 	
 	public JaCarsScan() {
 		 this.setUrl("https://www.jacars.net/cars/?page=%d");
@@ -35,20 +33,21 @@ public class JaCarsScan extends GenericScan  {
 		HashMap<String,Vehicle> vehiclesHash = new LinkedHashMap<String,Vehicle>();
 
 		try {
-			
+			log.info("Hello");
 			this.setDocument(this.getJsoup().connect(url));
 			
-			Elements newsHeadlines = this.getDocument().select("announcement-container");
+			Elements newsHeadlines = this.getDocument().select(".announcement-container");
 			for (Element headline : newsHeadlines) {
 				Vehicle vehicle = new Vehicle();
 
 				Elements imageTags = headline.getElementsByTag("img");
 				String yearMakeModel = imageTags.get(0).attr("title");
-				log.info(headline);
-				String price = headline.getElementsByTag("meta").get(0).text();				
+				String price = headline.select(".announcement-block__price").get(0).ownText();
+				Element atag = headline.select(".mask").get(0);
+				log.info(price);
 				
 				if (!StringUtil.isBlank(yearMakeModel)) {
-					vehicle.setLink(getLink(imageTags.get(0)));
+					vehicle.setLink(getLink(atag));
 					vehicle.setMake(getMake(yearMakeModel));
 					vehicle.setModel(getModel(yearMakeModel));
 					vehicle.setYear(getYear(yearMakeModel));
@@ -75,13 +74,14 @@ public class JaCarsScan extends GenericScan  {
 			vehicles.addAll(scan(urlString));
 		}
 		
-		vehicleRepository.saveAll(vehicles);
+		this.getVehicleRepository().saveAll(vehicles);
 		
 		return vehicles;
 	}
 	
 	public String getYear(String yearMakeModel) {
-		return yearMakeModel.split(" ")[3];
+		int length = yearMakeModel.split(" ").length;
+		return yearMakeModel.split(" ")[length - 1];
 	}
 	
 	public String getMake(String yearMakeModel) {
@@ -93,12 +93,19 @@ public class JaCarsScan extends GenericScan  {
 	}
 	
 	public String getLink(Element atag) {
-		return atag.attr("src");
+		return "https://www.jacars.net" + atag.attr("href");
 	}
 	
 	public Double getPrice(String price) {
-		log.info(price);
-		return Double.valueOf(price.replaceAll("[^\\d.]", ""));
+		
+		Double priceDouble = 0.0;
+		
+		try {
+			priceDouble = Double.valueOf(price.replaceAll("[^\\d.]", ""));
+		}catch(NumberFormatException e) {
+			log.info("Price could not be formatted");
+		}
+		return priceDouble;
 	}
 	
 	public int getMaxPageCount(String homePageUrl) {

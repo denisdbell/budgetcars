@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.budgetcars.net.repository.VehicleRepository;
 import com.budgetcars.net.wrapper.JsoupWrapper;
 import com.bugdetcars.net.Application;
 import com.bugdetcars.net.model.Vehicle;
@@ -30,6 +31,8 @@ class AutoAdsScanTests {
 	String autoAdsUrl = "http://autoads.com";
 	String autoAdsPageValue = null;
 	JsoupWrapper mockJsoup = Mockito.mock(JsoupWrapper.class);
+	VehicleRepository vehicleRepository = Mockito.mock(VehicleRepository.class);
+
 	
 	@BeforeEach
 	public void before() throws IOException {
@@ -37,8 +40,8 @@ class AutoAdsScanTests {
 		autoAdScan = new AutoAdsScan();
 		
 		autoAdScan.setJsoup(mockJsoup);
-		autoAdScan.setMaxPageCount(autoAdScan.getMaxPageCount());
-		
+		autoAdScan.setMaxPageCount(1);
+		autoAdScan.setVehicleRepository(vehicleRepository);
 	    File file = new File("src/test/resources/autoads.html");
 	    
 	    InputStream targetStream = new FileInputStream(file);
