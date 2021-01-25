@@ -19,7 +19,7 @@ public abstract class GenericScan {
 	private String url = "";
 	private int maxPageCount = 0;
 	private Document document = null;
-	private JsoupWrapper jsoup = null;
+	private JsoupWrapper jsoup = new JsoupWrapper();
 	@Autowired
 	private VehicleRepository vehicleRepository;
 	

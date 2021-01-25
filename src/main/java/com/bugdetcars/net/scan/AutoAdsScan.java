@@ -54,6 +54,7 @@ public class AutoAdsScan extends GenericScan {
 					//Store unique vehicles
 					vehiclesHash.put(vehicle.value(),vehicle);
 				}
+				log.info(vehicle);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

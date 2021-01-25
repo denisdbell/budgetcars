@@ -87,7 +87,7 @@ class JaCarsScanTest {
 		jaCarsScan.setUrl(jaCarsUrl);
 		List<Vehicle> vehicles = jaCarsScan.scanAll(jaCarsScan.getMaxPageCount());
 		Vehicle vehicle = vehicles.get(0);
-		assertEquals(vehicle.getModel(), "Mark");
+		assertEquals(vehicle.getModel(), "Mark X");
 	}
 	
 	@Test

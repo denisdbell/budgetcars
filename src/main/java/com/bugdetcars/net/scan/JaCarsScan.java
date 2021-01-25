@@ -89,7 +89,13 @@ public class JaCarsScan extends GenericScan  {
 	}	
 	
 	public String getModel(String yearMakeModel) {
-		return yearMakeModel.split(" ")[1];
+		int length = yearMakeModel.split(" ").length;
+		
+		if(length > 4) {
+			return yearMakeModel.split(" ")[1] + " " + yearMakeModel.split(" ")[2];
+		}else {
+			return yearMakeModel.split(" ")[1];
+		}		
 	}
 	
 	public String getLink(Element atag) {
@@ -108,24 +114,12 @@ public class JaCarsScan extends GenericScan  {
 		return priceDouble;
 	}
 	
-	public int getMaxPageCount(String homePageUrl) {
-		
-		Document document = this.getJsoup().connect(homePageUrl);
-		
+	public int getMaxPageCount(String homePageUrl) {		
+		Document document = this.getJsoup().connect(homePageUrl);	
 		Elements pageNumbers = document.select(".page-number");
-		
-		List<Integer> pageNumberList = new ArrayList<Integer>();
-		
-		for (Element pageNumber : pageNumbers) {
-			try {
-				pageNumberList.add(Integer.parseInt(pageNumber.text()));
-			}catch(Exception ex) {
-				log.info(ex.getMessage());
-			}
-		}
-		
-		return Collections.max(pageNumberList);
-
+		Integer pageCount = Integer.parseInt(pageNumbers.get(pageNumbers.size() - 1).text());
+		log.info(" generated page count: " + pageCount);
+		return pageCount;		
 	}
 	
 	public void setMaxPageCountFromPagination() {
