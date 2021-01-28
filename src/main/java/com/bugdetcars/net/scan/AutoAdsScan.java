@@ -6,17 +6,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.jsoup.internal.StringUtil;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.budgetcars.net.repository.VehicleRepository;
-import com.budgetcars.net.wrapper.JsoupWrapper;
 import com.bugdetcars.net.model.Vehicle;
 
-import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
 

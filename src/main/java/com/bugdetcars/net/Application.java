@@ -11,21 +11,25 @@ import com.bugdetcars.net.scan.JaCarsScan;
 
 @SpringBootApplication
 @EnableJpaRepositories("com.budgetcars.net.repository")
-public class Application  implements CommandLineRunner  {
-	
+public class Application implements CommandLineRunner {
+
 	@Autowired
 	AutoAdsScan autoAdScan;
 	@Autowired
 	JaCarsScan jaCarsScan;
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-	
+
 	@Override
 	public void run(String... args) throws Exception {
-		autoAdScan.scanAll(autoAdScan.getMaxPageCount());
-		jaCarsScan.setMaxPageCountFromPagination();
-		jaCarsScan.scanAll(jaCarsScan.getMaxPageCount());
-	}  
+		if (args.length != 0) {
+			if (args[0].equals("SCAN_ALL")) {
+				autoAdScan.scanAll(autoAdScan.getMaxPageCount());
+				jaCarsScan.setMaxPageCountFromPagination();
+				jaCarsScan.scanAll(jaCarsScan.getMaxPageCount());
+			}
+		}
+	}
 }
