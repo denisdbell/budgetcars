@@ -1,5 +1,7 @@
 package com.bugdetcars.net.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -23,12 +25,21 @@ public class Controller {
 	@Autowired
 	VehicleRepository vehicleRepository;
 	
-	
 	@GetMapping("/query")
 	public Page<Vehicle> query(@RequestParam String make,@RequestParam String  model,@RequestParam String year,int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
         Example<Vehicle> exampleQuery = Example.of(new Vehicle( make,  model,  year), matcher);
 		return vehicleRepository.findAll(exampleQuery, pageRequest);	
+	}
+	
+	@GetMapping("/getmake")
+	public List<String> getMake() {
+		return vehicleRepository.getAllMakes();	
+	}
+	
+	@GetMapping("/getmodels")
+	public List<String> query(@RequestParam String make) {
+		return vehicleRepository.getModelsByMake(make);
 	}
 }

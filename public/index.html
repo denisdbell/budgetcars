@@ -239,6 +239,14 @@
 	src="./Used Cars for Sale in Miami, FL (with Photos) - Autotrader_files/gateway.min.js.download"
 	type="text/javascript" async="true" data-vendor="fs"
 	data-role="gateway"></script>
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+<script
+	src="./Used Cars for Sale in Miami, FL (with Photos) - Autotrader_files/main.js"
+	type="text/javascript" async="true" data-vendor="fs"
+	data-role="gateway"></script>
 </head>
 <body class="ae-lang-en ae-device-desktop">
 	<header data-cmp="header" class="navbar navbar-default "
@@ -498,113 +506,13 @@
 							<div class="col-xs-12 margin-top-2">
 								<div class="col-xs-6 col-sm-4 padding-left-0">
 									<div class="form-group">
-										<select class="form-control"
+										<select id="makes_select" class="form-control"
 											aria-label="Select [object Object]" name="makeCode"
 											id="makeCode"><option selected="" value="">Any
 												Make</option>
-											<optgroup label="Popular Makes">
-												<option value="ACURA">Acura</option>
-												<option value="AUDI">Audi</option>
-												<option value="BMW">BMW</option>
-												<option value="BUICK">Buick</option>
-												<option value="CAD">Cadillac</option>
-												<option value="CHEV">Chevrolet</option>
-												<option value="CHRY">Chrysler</option>
-												<option value="DODGE">Dodge</option>
-												<option value="FER">Ferrari</option>
-												<option value="FORD">Ford</option>
-												<option value="GENESIS">Genesis</option>
-												<option value="GMC">GMC</option>
-												<option value="HONDA">Honda</option>
-												<option value="HYUND">Hyundai</option>
-												<option value="INFIN">INFINITI</option>
-												<option value="JAG">Jaguar</option>
-												<option value="JEEP">Jeep</option>
-												<option value="KIA">Kia</option>
-												<option value="ROV">Land Rover</option>
-												<option value="LEXUS">Lexus</option>
-												<option value="LINC">Lincoln</option>
-												<option value="MAZDA">MAZDA</option>
-												<option value="MB">Mercedes-Benz</option>
-												<option value="MINI">MINI</option>
-												<option value="MIT">Mitsubishi</option>
-												<option value="NISSAN">Nissan</option>
-												<option value="POR">Porsche</option>
-												<option value="RAM">RAM</option>
-												<option value="SUB">Subaru</option>
-												<option value="TESLA">Tesla</option>
-												<option value="TOYOTA">Toyota</option>
-												<option value="VOLKS">Volkswagen</option>
-												<option value="VOLVO">Volvo</option>
+											<optgroup id="makes" label="All Makes">												
 											</optgroup>
-											<optgroup label="All Makes">
-												<option value="AMC">AMC</option>
-												<option value="ACURA">Acura</option>
-												<option value="ALFA">Alfa Romeo</option>
-												<option value="ASTON">Aston Martin</option>
-												<option value="AUDI">Audi</option>
-												<option value="BMW">BMW</option>
-												<option value="BENTL">Bentley</option>
-												<option value="BUGATTI">Bugatti</option>
-												<option value="BUICK">Buick</option>
-												<option value="CAD">Cadillac</option>
-												<option value="CHEV">Chevrolet</option>
-												<option value="CHRY">Chrysler</option>
-												<option value="DAEW">Daewoo</option>
-												<option value="DATSUN">Datsun</option>
-												<option value="DELOREAN">DeLorean</option>
-												<option value="DODGE">Dodge</option>
-												<option value="EAGLE">Eagle</option>
-												<option value="FIAT">FIAT</option>
-												<option value="FER">Ferrari</option>
-												<option value="FISK">Fisker</option>
-												<option value="FORD">Ford</option>
-												<option value="FREIGHT">Freightliner</option>
-												<option value="GMC">GMC</option>
-												<option value="GENESIS">Genesis</option>
-												<option value="GEO">Geo</option>
-												<option value="AMGEN">HUMMER</option>
-												<option value="HONDA">Honda</option>
-												<option value="HYUND">Hyundai</option>
-												<option value="INFIN">INFINITI</option>
-												<option value="ISU">Isuzu</option>
-												<option value="JAG">Jaguar</option>
-												<option value="JEEP">Jeep</option>
-												<option value="KARMA">Karma</option>
-												<option value="KIA">Kia</option>
-												<option value="LAM">Lamborghini</option>
-												<option value="ROV">Land Rover</option>
-												<option value="LEXUS">Lexus</option>
-												<option value="LINC">Lincoln</option>
-												<option value="LOTUS">Lotus</option>
-												<option value="MAZDA">MAZDA</option>
-												<option value="MINI">MINI</option>
-												<option value="MAS">Maserati</option>
-												<option value="MAYBACH">Maybach</option>
-												<option value="MCLAREN">McLaren</option>
-												<option value="MB">Mercedes-Benz</option>
-												<option value="MERC">Mercury</option>
-												<option value="MIT">Mitsubishi</option>
-												<option value="NISSAN">Nissan</option>
-												<option value="OLDS">Oldsmobile</option>
-												<option value="PLYM">Plymouth</option>
-												<option value="PONT">Pontiac</option>
-												<option value="POR">Porsche</option>
-												<option value="RAM">RAM</option>
-												<option value="RR">Rolls-Royce</option>
-												<option value="SRT">SRT</option>
-												<option value="SAAB">Saab</option>
-												<option value="SATURN">Saturn</option>
-												<option value="SCION">Scion</option>
-												<option value="SUB">Subaru</option>
-												<option value="SUZUKI">Suzuki</option>
-												<option value="TESLA">Tesla</option>
-												<option value="TOYOTA">Toyota</option>
-												<option value="VOLKS">Volkswagen</option>
-												<option value="VOLVO">Volvo</option>
-												<option value="YUGO">Yugo</option>
-												<option value="SMART">smart</option>
-											</optgroup></select>
+											</select>
 									</div>
 								</div>
 								<div
@@ -612,8 +520,7 @@
 									<div class="form-group">
 										<select class="form-control"
 											aria-label="Select [object Object]" name="ModelCode"
-											id="ModelCode" disabled="" role="presentation"
-											aria-hidden="true" tabindex="-1"><option selected=""
+											id="ModelCode"><option selected=""
 												value="">Any Model</option></select>
 									</div>
 								</div>
